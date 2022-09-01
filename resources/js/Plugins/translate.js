@@ -30,6 +30,7 @@ const plugin = {
 
         Object.defineProperty(Vue.config.globalProperties, '$trans', {get: () => translate})
         Object.defineProperty(Vue.config.globalProperties, '$t', {get: () => translate})
+        Object.defineProperty(Vue.config.globalProperties, '__', {get: () => translate})
     }
 };
 
