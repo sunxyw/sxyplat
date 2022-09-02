@@ -18,13 +18,8 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(translate, {
-                messages: {
-                    'zh-CN.auth': {
-                        'password': 'hello my friend'
-                    }
-                },
-                locale: 'zh-CN',
-                fallback: 'en',
+                locale: 'zh-Hans',
+                fallbackLocale: 'en',
             })
             .mount(el);
     },

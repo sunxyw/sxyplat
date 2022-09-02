@@ -94,7 +94,9 @@ defineProps({
                         }}
                     </p>
 
-                    <span class="block font-semibold">{{ __('Only platform that enables your server to enter the "information age"') }}</span>
+                    <span class="block font-semibold">{{
+                            __('Only platform that enables your server to enter the "information age"')
+                        }}</span>
 
                     <div class="grid grid-cols-3 space-x-4 md:space-x-6 md:flex">
                         <a aria-label="add to slack" href="#"
@@ -112,7 +114,7 @@ defineProps({
                                 <img class="w-6"
                                      :src="ApiLogo"
                                      alt="api logo" loading="lazy" width="128" height="128">
-                                <span class="hidden font-medium md:block">{{ __('Using API') }}</span>
+                                <span class="hidden font-medium md:block">{{ $t('Using API') }}</span>
                             </div>
                         </a>
                     </div>
@@ -136,7 +138,9 @@ defineProps({
     <div class="pb-8">
         <div class="container m-auto px-6 md:px-12 lg:px-6">
             <div class="py-8 px-12 bg-cyan-50 rounded-2xl">
-                <span class="block text-center font-medium text-cyan-700">{{ __('Trusted by your favorite groups') }}</span>
+                <span class="block text-center font-medium text-cyan-700">{{
+                        __('Trusted by your favorite groups')
+                    }}</span>
                 <div class="mt-8 flex justify-center flex-wrap items-center gap-4 md:gap-6 lg:gap-8">
                     <div class="flex items-center">
                         <img class="w-36"
