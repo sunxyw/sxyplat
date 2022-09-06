@@ -1,5 +1,6 @@
 <script setup>
 import {Head, useForm} from '@inertiajs/inertia-vue3';
+import FlashMessageAlert from "@/Components/FlashMessageAlert.vue";
 
 const form = useForm({
     email: '',
@@ -14,7 +15,8 @@ const submit = () => {
     <Head title="Welcome"/>
 
     <div class="navbar fixed">
-        <a class="btn btn-ghost normal-case text-xl">{{ __('SXYPlat') }}</a>
+        <a class="btn btn-ghost normal-case text-xl mr-5">{{ __('SXYPlat') }}</a>
+        <FlashMessageAlert></FlashMessageAlert>
     </div>
 
     <div class="hero min-h-screen bg-base-200">
