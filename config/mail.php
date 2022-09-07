@@ -53,6 +53,10 @@ return [
             'transport' => 'mailgun',
         ],
 
+        'templated-mailgun' => [
+            'transport' => 'templated-mailgun',
+        ],
+
         'postmark' => [
             'transport' => 'postmark',
         ],
@@ -92,8 +96,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@mg.sunxyw.xyz'),
+        'name' => env('MAIL_FROM_NAME', 'SXYA Mailing Service'),
     ],
 
     /*

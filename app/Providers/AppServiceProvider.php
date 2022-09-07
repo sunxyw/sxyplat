@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Mail\Transports\TemplatedMailgunTransport;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
+use Mailgun\Mailgun;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +26,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Mail::extend('templated-mailgun', function () {
+            $config = config('services.mailgun', []);
+            return new TemplatedMailgunTransport(
+                Mailgun::create(
+                    $config['secret'],
+                )
+            );
+        });
     }
 }
