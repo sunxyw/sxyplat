@@ -12,11 +12,13 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::post('register', [RegisterController::class, 'request']);
+    // 请求注册链接
+    Route::post('register/request', [RegisterController::class, 'request'])->name('register.request');
+    // 进行注册
     Route::get('register/{email}', [RegisterController::class, 'create'])
         ->middleware('signed')
         ->name('register');
-    Route::get('register', [RegisteredUserController::class, 'create']);
+    Route::post('register', [RegisterController::class, 'store'])->name('register.store');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');

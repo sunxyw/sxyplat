@@ -7,7 +7,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('register'));
+    form.post(route('register.request'));
 };
 </script>
 
@@ -36,7 +36,9 @@ const submit = () => {
                             <span class="label-text-alt">{{ form.errors.email }}</span>
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary inline-flex">{{ __('Try it for free') }}</button>
+                    <button type="submit" class="btn btn-primary inline-flex" :class="{loading: form.processing}">
+                        {{ __('Try it for free') }}
+                    </button>
                 </form>
             </div>
         </div>

@@ -1,81 +1,78 @@
 <script setup>
-import BreezeButton from '@/Components/Button.vue';
-import BreezeGuestLayout from '@/Layouts/Guest.vue';
-import BreezeInput from '@/Components/Input.vue';
-import BreezeInputError from '@/Components/InputError.vue';
-import BreezeLabel from '@/Components/Label.vue';
-import {Head, Link, useForm} from '@inertiajs/inertia-vue3';
+import {Head, useForm} from '@inertiajs/inertia-vue3';
+import FlashMessageAlert from "@/Components/FlashMessageAlert.vue";
+
+const props = defineProps({
+    email: String
+})
 
 const form = useForm({
     name: '',
-    email: '',
+    email: props.email,
     password: '',
-    password_confirmation: '',
     terms: false,
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.post(route('register.store'), {
+        onFinish: () => form.reset('password'),
     });
 };
 </script>
 
 <template>
-    <BreezeGuestLayout>
-        <Head title="Register"/>
+    <Head title="Register"/>
 
-        <form @submit.prevent="submit">
-            <div>
-                <BreezeLabel for="name" value="Name"/>
-                <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus
-                             autocomplete="name"/>
-                <BreezeInputError class="mt-2" :message="form.errors.name"/>
+    <div class="navbar fixed">
+        <a class="btn btn-ghost normal-case text-xl mr-5">{{ __('SXYPlat') }}</a>
+        <FlashMessageAlert></FlashMessageAlert>
+    </div>
+
+    <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content flex-col lg:flex-row">
+            <div class="text-center lg:text-left">
+                <h1 class="text-5xl font-bold">{{ __('Last Step!') }}</h1>
+                <p class="py-6">{{ __('You are almost to get there.') }}</p>
             </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="email" value="Email"/>
-                <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required
-                             autocomplete="username"/>
-                <BreezeInputError class="mt-2" :message="form.errors.email"/>
+            <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                <form class="card-body" @submit.prevent="submit">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">{{ __('Name') }}</span>
+                        </label>
+                        <input type="text" :placeholder="__('Name')" class="input input-bordered"
+                               v-model="form.name"/>
+                        <label class="label">
+                            <span class="label-text-alt">{{ form.errors.name }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">{{ __('Email') }}</span>
+                        </label>
+                        <input type="email" :placeholder="__('Email')" class="input input-bordered"
+                               :value="form.email + __('(Auto filled)')" readonly/>
+                        <label class="label">
+                            <span class="label-text-alt">{{ form.errors.email }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">{{ __('Password') }}</span>
+                        </label>
+                        <input type="password" :placeholder="__('Password')" v-model="form.password"
+                               class="input input-bordered"/>
+                        <label class="label">
+                            <span class="label-text-alt">{{ form.errors.password }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control mt-6">
+                        <button type="submit" class="btn btn-primary" :class="{loading: form.processing}">
+                            {{ __('Create Account') }}
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="password" value="Password"/>
-                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required
-                             autocomplete="new-password"/>
-                <BreezeInputError class="mt-2" :message="form.errors.password"/>
-            </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="password_confirmation" value="Confirm Password"/>
-                <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full"
-                             v-model="form.password_confirmation" required autocomplete="new-password"/>
-                <BreezeInputError class="mt-2" :message="form.errors.password_confirmation"/>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Already registered?
-                </Link>
-
-                <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </BreezeButton>
-            </div>
-        </form>
-    </BreezeGuestLayout>
+        </div>
+    </div>
 </template>
-
-<i18n>
-{
-    "zh-Hans": {
-        "Register": "注册",
-        "Name": "姓名",
-        "Email": "邮箱",
-        "Password": "密码",
-        "Confirm Password": "确认密码",
-        "Already registered?": "已经注册？"
-    }
-}
-</i18n>
