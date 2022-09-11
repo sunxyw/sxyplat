@@ -147,12 +147,12 @@ const toggleNavbar = () => {
                         >
                             {{ __('Sign In') }}
                         </a>
-                        <a
-                            href="signup.html"
+                        <Link
+                            :href="route('central::signup')"
                             class="signUpBtn rounded-lg bg-white bg-opacity-20 py-3 px-6 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
                         >
                             {{ __('Sign Up') }}
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

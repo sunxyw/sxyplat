@@ -17,7 +17,7 @@ class RegisterRequested extends Mailable implements ShouldQueue
      * @return void
      */
     public function __construct(
-        public string $link,
+        public string $code,
     )
     {
         //
@@ -35,9 +35,8 @@ class RegisterRequested extends Mailable implements ShouldQueue
             ->metadata('template', 'general.action')
             ->metadata('variables', serialize([
                 'heading' => __('Register Request Accepted'),
-                'description' => __('Your register request has been accepted. Please click the button below to complete the registration process.'),
-                'action' => __('Register'),
-                'action_link' => $this->link,
+                'description' => __('Your register request has been accepted. Please input the code below to complete the registration process.'),
+                'action' => $this->code,
                 'footer' => __('If you did not request a register, no further action is required.'),
             ]));
     }

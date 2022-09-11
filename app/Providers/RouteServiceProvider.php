@@ -58,7 +58,8 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->domain($domain)
             ->namespace($this->namespace)
-            ->group(base_path('routes/web.php'));
+            ->name('central::')
+            ->group(base_path('routes/central/web.php'));
     }
 
     protected function mapApiRoutes($domain)

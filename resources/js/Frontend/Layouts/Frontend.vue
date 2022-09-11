@@ -1,10 +1,6 @@
 <script setup>
-import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
-import {Link} from '@inertiajs/inertia-vue3';
-
 import "wowjs/css/libs/animate.css";
 import wow from "wowjs";
-import LogoWhite from '../../../images/logo/logo-white.svg';
 import Header from "@/Frontend/Components/Layout/Header.vue";
 import Footer from "@/Frontend/Components/Layout/Footer.vue";
 import BackToTop from "@/Frontend/Components/BackToTop.vue";
@@ -2821,8 +2817,4 @@ onMounted(() => {
     <Footer></Footer>
 
     <BackToTop></BackToTop>
-
-    <!-- ====== All Scripts -->
 </template>
-
-<script></script>
