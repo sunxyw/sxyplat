@@ -1,7 +1,8 @@
 <script setup>
 import {Link} from '@inertiajs/inertia-vue3';
 
-import LogoWhite from '@/../images/logo/logo-white.svg';
+import LogoWhite from '../../../../images/logo/logo-white.svg';
+import {ref} from "vue";
 
 const navbar = [
     {
@@ -17,6 +18,12 @@ const navbar = [
         href: '/contact',
     },
 ];
+
+const navbarActive = ref(false);
+
+const toggleNavbar = () => {
+    navbarActive.value = !navbarActive.value;
+}
 </script>
 
 <template>
@@ -26,7 +33,7 @@ const navbar = [
         <div class="container">
             <div class="relative -mx-4 flex items-center justify-between">
                 <div class="w-60 max-w-full px-4">
-                    <Link href="/" class="navbar-logo block w-full py-5">
+                    <Link href="/public" class="navbar-logo block w-full py-5">
                         <img
                             :src="LogoWhite"
                             alt="logo"
@@ -39,6 +46,8 @@ const navbar = [
                         <button
                             id="navbarToggler"
                             class="absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden"
+                            :class="{'navbarTogglerActive': navbarActive}"
+                            @click="toggleNavbar"
                         >
                             <span
                                 class="relative my-[6px] block h-[2px] w-[30px] bg-white"
@@ -52,7 +61,8 @@ const navbar = [
                         </button>
                         <nav
                             id="navbarCollapse"
-                            class="absolute right-4 top-full hidden w-full max-w-[250px] rounded-lg bg-white py-5 shadow-lg lg:static lg:block lg:w-full lg:max-w-full lg:bg-transparent lg:py-0 lg:px-4 lg:shadow-none xl:px-6"
+                            class="absolute right-4 top-full w-full max-w-[250px] rounded-lg bg-white py-5 shadow-lg lg:static lg:block lg:w-full lg:max-w-full lg:bg-transparent lg:py-0 lg:px-4 lg:shadow-none xl:px-6"
+                            :class="{'hidden': !navbarActive}"
                         >
                             <ul class="block lg:flex">
                                 <li class="group relative" v-for="(item, index) in navbar" :key="item.name">
@@ -62,6 +72,7 @@ const navbar = [
                                             'lg:ml-7 xl:ml-12': index > 0,
                                             'ud-menu-scroll mx-8 flex py-2 text-base text-dark group-hover:text-primary lg:mr-0 lg:inline-flex lg:py-6 lg:px-0 lg:text-white lg:group-hover:text-white lg:group-hover:opacity-70': true,
                                         }"
+                                        @click="toggleNavbar"
                                     >
                                         {{ item.name }}
                                     </Link>

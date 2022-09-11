@@ -12,7 +12,16 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    // resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    resolve: (name) => {
+        if (name.startsWith('@frontend::')) {
+            return resolvePageComponent(`./Frontend/Pages/${name.replace('@frontend::', '')}.vue`, import.meta.glob('./Frontend/Pages/**/*.vue'));
+        } else if (name.startsWith('@backend::')) {
+            return resolvePageComponent(`./Backend/Pages/${name.replace('@backend::', '')}.vue`, import.meta.glob('./Backend/Pages/**/*.vue'));
+        } else {
+            return resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue'));
+        }
+    },
     setup({el, app, props, plugin}) {
         return createApp({render: () => h(app, props)})
             .use(plugin)

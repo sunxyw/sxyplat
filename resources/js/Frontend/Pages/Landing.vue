@@ -1,8 +1,8 @@
 <script setup>
-import MessDot from "@/Components/Decoration/MessDot.vue";
-import Frontend from "@/Layouts/Frontend.vue";
-import FeatureCard from "@/Components/FeatureCard.vue";
-import PricingCard from "@/Components/PricingCard.vue";
+import MessDot from "@/Frontend/Components/Decoration/MessDot.vue";
+import Frontend from "@/Frontend/Layouts/Frontend.vue";
+import FeatureCard from "@/Frontend/Components/FeatureCard.vue";
+import PricingCard from "@/Frontend/Components/PricingCard.vue";
 </script>
 
 <template>

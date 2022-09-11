@@ -1,7 +1,7 @@
 <script setup>
 import {Head, useForm} from '@inertiajs/inertia-vue3';
 import FlashMessageAlert from "@/Components/FlashMessageAlert.vue";
-import Frontend from "@/Layouts/Frontend.vue";
+import Frontend from "@/Frontend/Layouts/Frontend.vue";
 
 const form = useForm({
     email: '',
