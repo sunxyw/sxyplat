@@ -21,4 +21,9 @@ export default defineConfig({
     ssr: {
         noExternal: ['@inertiajs/server'],
     },
+    server: {
+        hmr: {
+            host: process.env.VITE_HMR_HOST || 'localhost',
+        }
+    }
 });
