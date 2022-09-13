@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Central;
 use App\Http\Controllers\Controller;
 use App\Mail\RegisterRequested;
 use App\Models\User;
+use App\Notifications\VerifyCodeRequested;
+use App\Services\VerifyCodeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +35,13 @@ class SignUpController extends Controller
         ]);
 
         if (!$request->filled('email_verify_code')) {
+            $tmp_user = new User([
+                'name' => 'Guest',
+                'email' => $request->input('email'),
+            ]);
+            $code = app(VerifyCodeService::class)->generateAndStore('email', $tmp_user->email);
+            $tmp_user->notify(new VerifyCodeRequested($code));
+
             return Inertia::render('@frontend::SignUp', [
                 'emailLocked' => true,
                 'email' => $request->post('email'),
@@ -44,13 +53,14 @@ class SignUpController extends Controller
         $name = $request->post('name');
         $password = $request->post('password');
 
-        if ($code !== '123456') {
+        if (!app(VerifyCodeService::class)->verify('email', $request->post('email'), $code)) {
             return back()->withErrors([
                 'email_verify_code' => __('The code is incorrect.'),
             ]);
         }
 
-        DB::transaction(function () use ($request, $id, $name, $password) {
+        DB::beginTransaction();
+        try {
             $user = User::create([
                 'name' => $name,
                 'email' => $request->post('email'),
@@ -64,7 +74,11 @@ class SignUpController extends Controller
             $tenant->domains()->create([
                 'domain' => $id,
             ]);
-        });
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         return redirect()->route('home');
     }
