@@ -25,7 +25,7 @@ class CentralUser extends Authenticatable implements SyncMaster
 
     public function tenants(): BelongsToMany
     {
-        return $this->belongsToMany(Tenant::class, 'user_has_tenants', 'global_user_id', 'tenant_id')
+        return $this->belongsToMany(Tenant::class, 'tenant_has_users', 'global_user_id', 'tenant_id', 'global_id')
             ->using(TenantPivot::class);
     }
 
