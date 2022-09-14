@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "dansmaculotte/laravel-mail-template": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.3",
         "laravel/framework": "^9.19",
@@ -14,6 +15,7 @@
         "mailgun/mailgun-php": "^3.5",
         "mariuzzo/laravel-js-localization": "^1.9",
         "nyholm/psr7": "^1.5",
+        "stancl/tenancy": "^3.5",
         "symfony/http-client": "^6.1",
         "symfony/mailgun-mailer": "^6.1",
         "tightenco/ziggy": "^1.0",

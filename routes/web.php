@@ -20,7 +20,7 @@ Route::get('preview', function () {
 });
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('@frontend::Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
