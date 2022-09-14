@@ -18,9 +18,19 @@ class CentralUser extends Authenticatable implements SyncMaster
     use CentralConnection;
 
     protected $fillable = [
+        'global_id',
         'name',
         'email',
         'password',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     public function tenants(): BelongsToMany
