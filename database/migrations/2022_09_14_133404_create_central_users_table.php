@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,10 +13,14 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('user_has_tenants', function (Blueprint $table) {
+        Schema::create('central_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
+            $table->string('global_id')->unique();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('user_has_tenants');
+        Schema::dropIfExists('central_users');
     }
 };
