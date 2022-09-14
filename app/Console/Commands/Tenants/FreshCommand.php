@@ -52,17 +52,21 @@ class FreshCommand extends Command
             $this->info('Dropping missing tenants databases...');
             // Get all databases starting with the tenant prefix
             $databases = DB::select('SHOW DATABASES LIKE "' . config('tenancy.database.prefix') . '%"');
-            $column_name = sprintf('Database (%s%%)', config('tenancy.database.prefix'));
-            $databases = array_map(fn($database) => $database->{$column_name}, $databases);
-            $this->comment('This will drop all tenants databases. Are you sure?');
-            $this->comment('This may include databases that are not tenants databases.');
-            $this->info(sprintf('Databases(%d): %s', count($databases), implode(', ', $databases)));
-            if (!$this->confirm('Continue?')) {
-                return 1;
-            }
-            foreach ($databases as $database) {
-                $this->info("Dropping database {$database}...");
-                DB::statement("DROP DATABASE IF EXISTS {$database}");
+            if (count($databases)) {
+                $column_name = sprintf('Database (%s%%)', config('tenancy.database.prefix'));
+                $databases = array_map(fn($database) => $database->{$column_name}, $databases);
+                $this->comment('This will drop all tenants databases. Are you sure?');
+                $this->comment('This may include databases that are not tenants databases.');
+                $this->info(sprintf('Databases(%d): %s', count($databases), implode(', ', $databases)));
+                if (!$this->confirm('Continue?')) {
+                    return 1;
+                }
+                foreach ($databases as $database) {
+                    $this->info("Dropping database {$database}...");
+                    DB::statement("DROP DATABASE IF EXISTS {$database}");
+                }
+            } else {
+                $this->info('No missing tenants found.');
             }
         }
 
