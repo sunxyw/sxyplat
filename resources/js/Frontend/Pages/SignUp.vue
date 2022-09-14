@@ -9,9 +9,9 @@ import MessDot from "@/Frontend/Components/Decoration/MessDot.vue";
 import FormInput from "@/Frontend/Components/FormInput.vue";
 
 const props = defineProps({
-    emailLocked: {
-        type: Boolean,
-        required: true,
+    step: {
+        type: Number,
+        required: true
     },
     email: {
         type: String,
@@ -34,7 +34,7 @@ const submit = () => {
 };
 
 const showExtendedForm = computed(() => {
-    return props.emailLocked || (form.hasErrors && !form.errors.email);
+    return props.step > 0;
 });
 </script>
 
@@ -88,7 +88,7 @@ const showExtendedForm = computed(() => {
                                 <div class="mb-10">
                                     <input
                                         type="submit"
-                                        :value="emailLocked ? __('Sign Up') : __('Send Verification Code')"
+                                        :value="showExtendedForm ? __('Sign Up') : __('Send Verification Code')"
                                         class="border-primary w-full cursor-pointer rounded-md border bg-primary py-3 px-5 text-base text-white transition duration-300 ease-in-out hover:shadow-md"
                                     />
                                 </div>
