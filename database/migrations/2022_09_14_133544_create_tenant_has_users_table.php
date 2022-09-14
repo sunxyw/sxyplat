@@ -12,11 +12,13 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('user_has_tenants', function (Blueprint $table) {
+        Schema::create('tenant_has_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('tenant_id')->constrained('tenants')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignUuid('global_user_id')->constrained('central_users', 'global_id')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['tenant_id', 'global_user_id']);
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('user_has_tenants');
+        Schema::dropIfExists('tenant_has_users');
     }
 };

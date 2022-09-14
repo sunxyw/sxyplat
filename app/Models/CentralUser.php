@@ -2,27 +2,24 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Stancl\Tenancy\Contracts\Syncable;
+use Stancl\Tenancy\Contracts\SyncMaster;
+use Stancl\Tenancy\Database\Concerns\CentralConnection;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
+use Stancl\Tenancy\Database\Models\TenantPivot;
 
 /**
- * @mixin IdeHelperUser
+ * @mixin IdeHelperCentralUser
  */
-class User extends Authenticatable implements Syncable
+class CentralUser extends Authenticatable implements SyncMaster
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
     use ResourceSyncing;
+    use CentralConnection;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'global_id',
         'name',
@@ -30,24 +27,25 @@ class User extends Authenticatable implements Syncable
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function tenants(): BelongsToMany
+    {
+        return $this->belongsToMany(Tenant::class, 'tenant_has_users', 'global_user_id', 'tenant_id', 'global_id')
+            ->using(TenantPivot::class);
+    }
+
+    public function getTenantModelName(): string
+    {
+        return User::class;
+    }
 
     public function getGlobalIdentifierKey()
     {
@@ -61,7 +59,7 @@ class User extends Authenticatable implements Syncable
 
     public function getCentralModelName(): string
     {
-        return CentralUser::class;
+        return self::class;
     }
 
     public function getSyncedAttributeNames(): array
