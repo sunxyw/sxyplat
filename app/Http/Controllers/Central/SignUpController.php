@@ -61,52 +61,63 @@ class SignUpController extends Controller
         $step = $this->flowControlService->getStep(self::FLOW_NAME, $flow_key);
         switch ($step) {
             case self::STEP_REQUEST_VERIFY_CODE:
-                $this->flowControlService->storeMetaForFlow(self::FLOW_NAME, $flow_key, [
-                    'email' => $request->input('email'),
-                ]);
-                $this->flowControlService->nextStep(self::FLOW_NAME, $flow_key);
-                $tmp_user = new User([
-                    'name' => 'Guest',
-                    'email' => $request->input('email'),
-                ]);
-                $code = $this->verifyCodeService->generateAndStore('email', $tmp_user->email);
-                $tmp_user->notify(new VerifyCodeRequested($code));
-                return $this->render([
-                    'step' => self::STEP_FILL_FORM,
-                    'email' => $request->input('email'),
-                ]);
+                return $this->handleStepRequestVerifyCode($flow_key, $request);
             case self::STEP_FILL_FORM:
-                $code = $request->post('email_verify_code');
-                $id = $request->post('id');
-                $name = $request->post('name');
-                $password = $request->post('password');
+                return $this->handleStepFillForm($flow_key, $request);
+            default:
+                abort(404);
+        }
+    }
 
-                if (!$this->verifyCodeService->verify('email', $request->post('email'), $code)) {
-                    return back()->withErrors([
-                        'email_verify_code' => __('The code is incorrect.'),
-                    ]);
-                }
+    private function handleStepRequestVerifyCode(string $flow_key, Request $request)
+    {
+        $this->flowControlService->storeMetaForFlow(self::FLOW_NAME, $flow_key, [
+            'email' => $request->input('email'),
+        ]);
+        $this->flowControlService->nextStep(self::FLOW_NAME, $flow_key);
+        $tmp_user = new User([
+            'name' => 'Guest',
+            'email' => $request->input('email'),
+        ]);
+        $code = $this->verifyCodeService->generateAndStore('email', $tmp_user->email);
+        $tmp_user->notify(new VerifyCodeRequested($code));
+        return $this->render([
+            'step' => self::STEP_FILL_FORM,
+            'email' => $request->input('email'),
+        ]);
+    }
 
-                /** @var User $c_user */
-                $c_user = CentralUser::query()->create([
-                    'name' => $name,
-                    'email' => $request->post('email'),
-                    'password' => Hash::make($password),
-                ]);
-                $tenant = Tenant::query()->create([
-                    'id' => $id,
-                ]);
-                $tenant->run(function () use ($c_user) {
-                    User::create([
-                        'global_id' => $c_user->global_id,
-                        'name' => $c_user->name,
-                        'email' => $c_user->email,
-                        'password' => $c_user->password,
-                    ]);
-                });
-                $this->flowControlService->endFlow(self::FLOW_NAME, $flow_key);
+    private function handleStepFillForm(string $flow_key, Request $request)
+    {
+        $code = $request->post('email_verify_code');
+        $id = $request->post('id');
+        $name = $request->post('name');
+        $password = $request->post('password');
+
+        if (!$this->verifyCodeService->verify('email', $request->post('email'), $code)) {
+            return back()->withErrors([
+                'email_verify_code' => __('The code is incorrect.'),
+            ]);
         }
 
+        /** @var User $c_user */
+        $c_user = CentralUser::query()->create([
+            'name' => $name,
+            'email' => $request->post('email'),
+            'password' => Hash::make($password),
+        ]);
+        $tenant = Tenant::query()->create([
+            'id' => $id,
+        ]);
+        $tenant->run(function () use ($c_user) {
+            User::create([
+                'global_id' => $c_user->global_id,
+                'name' => $c_user->name,
+                'email' => $c_user->email,
+                'password' => $c_user->password,
+            ]);
+        });
+        $this->flowControlService->endFlow(self::FLOW_NAME, $flow_key);
         return redirect()->route('central::home');
     }
 }
