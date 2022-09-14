@@ -142,7 +142,7 @@ const toggleNavbar = () => {
                     </div>
                     <div class="hidden justify-end pr-16 sm:flex lg:pr-0">
                         <a
-                            href="signin.html"
+                            :href="route('central::signin')"
                             class="loginBtn py-3 px-7 text-base font-medium text-white hover:opacity-70"
                         >
                             {{ __('Sign In') }}

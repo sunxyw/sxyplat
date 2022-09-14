@@ -1,5 +1,5 @@
 <script setup>
-import Frontend from "@/Frontend/Layouts/Frontend.vue"
+import Frontend from "@/Frontend/Layouts/Frontend.vue";
 import Banner from "@/Frontend/Components/Banner.vue";
 import Logo from "@/../images/logo/logo.svg";
 import {useForm} from "@inertiajs/inertia-vue3";
@@ -8,39 +8,21 @@ import {Link} from "@inertiajs/inertia-vue3";
 import MessDot from "@/Frontend/Components/Decoration/MessDot.vue";
 import FormInput from "@/Frontend/Components/FormInput.vue";
 
-const props = defineProps({
-    step: {
-        type: Number,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-    },
-})
-
 const form = useForm({
-    id: '',
-    name: '',
-    email: props.email,
+    email: '',
     password: '',
-    email_verify_code: '',
 })
 
 const submit = () => {
-    form.post(route('central::signup'), {
-        onFinish: () => form.reset('password', 'email_verify_code'),
+    form.post(route('central::signin'), {
+        onFinish: () => form.reset('password'),
     });
 };
-
-const showExtendedForm = computed(() => {
-    return props.step > 0;
-});
 </script>
 
 <template>
     <Frontend>
-        <Banner title="Sign Up"></Banner>
+        <Banner title="Sign In"></Banner>
 
         <section class="bg-[#F4F7FF] py-14 lg:py-20">
             <div class="container">
@@ -61,34 +43,16 @@ const showExtendedForm = computed(() => {
                             <form @submit.prevent="submit">
                                 <div class="mb-6">
                                     <FormInput type="email" :placeholder="__('Email')" v-model="form.email"
-                                               :readonly="showExtendedForm" :error="form.errors.email"></FormInput>
+                                               :error="form.errors.email"></FormInput>
                                 </div>
-                                <template v-if="showExtendedForm">
-                                    <div class="mb-6">
-                                        <FormInput type="text" :placeholder="__('Email Verify Code')"
-                                                   v-model="form.email_verify_code"
-                                                   :error="form.errors.email_verify_code"></FormInput>
-                                    </div>
-                                    <div class="mb-6">
-                                        <FormInput type="text" :placeholder="__('Organization ID')"
-                                                   v-model="form.id"
-                                                   :error="form.errors.id"></FormInput>
-                                    </div>
-                                    <div class="mb-6">
-                                        <FormInput type="text" :placeholder="__('You Name')"
-                                                   v-model="form.name"
-                                                   :error="form.errors.name"></FormInput>
-                                    </div>
-                                    <div class="mb-6">
-                                        <FormInput type="password" :placeholder="__('Password')"
-                                                   v-model="form.password"
-                                                   :error="form.errors.password"></FormInput>
-                                    </div>
-                                </template>
+                                <div class="mb-6">
+                                    <FormInput type="password" :placeholder="__('Password')" v-model="form.password"
+                                               :error="form.errors.password"></FormInput>
+                                </div>
                                 <div class="mb-10">
                                     <input
                                         type="submit"
-                                        :value="showExtendedForm ? __('Sign Up') : __('Send Verification Code')"
+                                        :value="__('Sign In')"
                                         class="border-primary w-full cursor-pointer rounded-md border bg-primary py-3 px-5 text-base text-white transition duration-300 ease-in-out hover:shadow-md"
                                     />
                                 </div>
@@ -153,28 +117,16 @@ const showExtendedForm = computed(() => {
                             <!--                                    </a>-->
                             <!--                                </li>-->
                             <!--                            </ul>-->
-
-                            <p class="mb-4 text-base text-[#adadad]">
-                                {{ __('By creating an account you are agree with our') }}
-                                <a
-                                    href="javascript:void(0)"
-                                    class="text-primary hover:underline"
-                                >
-                                    {{ __('Privacy') }}
-                                </a>
-                                {{ __('and') }}
-                                <a
-                                    href="javascript:void(0)"
-                                    class="text-primary hover:underline"
-                                >
-                                    {{ __('Policy') }}
-                                </a>
-                            </p>
-
+                            <a
+                                href="javascript:void(0)"
+                                class="mb-2 inline-block text-base text-[#adadad] hover:text-primary"
+                            >
+                                {{ __('Forget Password?') }}
+                            </a>
                             <p class="text-base text-[#adadad]">
-                                {{ __('Already have an account?') }}
-                                <Link :href="route('central::signin')" class="text-primary hover:underline">
-                                    {{ __('Sign In') }}
+                                {{ __('Not a member yet?') }}
+                                <Link :href="route('central::signup')" class="text-primary hover:underline">
+                                    {{ __('Sign Up') }}
                                 </Link>
                             </p>
 

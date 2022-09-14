@@ -28,5 +28,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/signup', [Central\SignUpController::class, 'create'])->name('signup');
     Route::post('/signup', [Central\SignUpController::class, 'store']);
 
-    Route::get('/signin', fn() => 'Sign In')->name('signin');
+    Route::get('/signin', [Central\SignInController::class, 'create'])->name('signin');
+    Route::post('/signin', [Central\SignInController::class, 'store']);
 });
