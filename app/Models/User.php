@@ -10,6 +10,9 @@ use Laravel\Sanctum\HasApiTokens;
 use Stancl\Tenancy\Contracts\Syncable;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 
+/**
+ * @mixin IdeHelperUser
+ */
 class User extends Authenticatable implements Syncable
 {
     use HasApiTokens, HasFactory, Notifiable;

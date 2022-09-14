@@ -11,6 +11,9 @@ use Stancl\Tenancy\Database\Concerns\CentralConnection;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 use Stancl\Tenancy\Database\Models\TenantPivot;
 
+/**
+ * @mixin IdeHelperCentralUser
+ */
 class CentralUser extends Authenticatable implements SyncMaster
 {
     use HasFactory;
