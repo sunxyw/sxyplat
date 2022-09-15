@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('tenant_has_users', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('tenant_id')->constrained('tenants')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignUuid('global_user_id')->constrained('central_users', 'global_id')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignUuid('global_user_id')->constrained('users', 'global_id')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
 
             $table->unique(['tenant_id', 'global_user_id']);
