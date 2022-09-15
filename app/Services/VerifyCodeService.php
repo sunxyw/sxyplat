@@ -6,7 +6,7 @@ class VerifyCodeService
 {
     private function generate(int $length = 6): string
     {
-        return bin2hex(random_bytes($length / 2));
+        return strtoupper(bin2hex(random_bytes($length / 2)));
     }
 
     public function generateAndStore(string $subject, string $key, int $length = 6, int $expires_minutes = 5): string
@@ -18,6 +18,6 @@ class VerifyCodeService
 
     public function verify(string $subject, string $key, string $code): bool
     {
-        return cache()->pull("verify-code:{$subject}.{$key}") === $code;
+        return cache()->pull("verify-code:{$subject}.{$key}") === strtoupper($code);
     }
 }
