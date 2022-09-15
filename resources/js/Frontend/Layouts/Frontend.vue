@@ -10,7 +10,7 @@ import {nextTick, onMounted} from "vue";
 onMounted(() => {
     setupSticky();
     nextTick(() => {
-        new wow.WOW({live: true}).init();
+        // new wow.WOW({live: true}).init();
     });
 });
 </script>

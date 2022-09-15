@@ -21,6 +21,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/dashboard', function () {
+//    Auth::logout();
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 

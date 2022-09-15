@@ -21,12 +21,12 @@ class SignInController extends Controller
             'password' => ['required'],
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
-            ]);
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('central::dashboard'));
         }
 
-        return redirect()->route('central::home');
+        return back()->with('error', 'The provided credentials do not match our records.');
     }
 }

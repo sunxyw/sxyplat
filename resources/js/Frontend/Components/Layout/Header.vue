@@ -140,18 +140,26 @@ const toggleNavbar = () => {
                             </ul>
                         </nav>
                     </div>
-                    <div class="hidden justify-end pr-16 sm:flex lg:pr-0">
-                        <a
+                    <div class="hidden justify-end pr-16 sm:flex lg:pr-0" v-if="$page.props.auth.user === null">
+                        <Link
                             :href="route('central::signin')"
                             class="loginBtn py-3 px-7 text-base font-medium text-white hover:opacity-70"
                         >
                             {{ __('Sign In') }}
-                        </a>
+                        </Link>
                         <Link
                             :href="route('central::signup')"
                             class="signUpBtn rounded-lg bg-white bg-opacity-20 py-3 px-6 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
                         >
                             {{ __('Sign Up') }}
+                        </Link>
+                    </div>
+                    <div class="hidden justify-end pr-16 sm:flex lg:pr-0" v-else>
+                        <Link
+                            :href="route('central::signin')"
+                            class="loginBtn py-3 px-7 text-base font-medium text-white hover:opacity-70"
+                        >
+                            {{ $page.props.auth.user.name }}
                         </Link>
                     </div>
                 </div>
