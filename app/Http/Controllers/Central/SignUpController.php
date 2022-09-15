@@ -38,7 +38,7 @@ class SignUpController extends Controller
         if ($request->query('reset')) {
             $this->flowControlService->endFlow(self::FLOW_NAME, $key);
         }
-        if (!$this->flowControlService->isFlowStarted(self::FLOW_NAME, $key)) {
+        if (!$this->flowControlService->isFlowStarted(self::FLOW_NAME, $key ?: '')) {
             $key = $this->flowControlService->startFlow(self::FLOW_NAME);
             $request->session()->put('flow_key', $key);
         }
@@ -50,7 +50,7 @@ class SignUpController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => ['required', 'email', 'unique:central_users,email', 'max:255', 'string'],
+            'email' => ['required', 'email', 'unique:users,email', 'max:255', 'string'],
             'email_verify_code' => ['present', 'nullable', 'string', 'size:6'],
             'id' => ['required_with:email_verify_code', 'nullable', 'string', 'min:6', 'max:12'],
             'name' => ['required_with:email_verify_code', 'nullable', 'string', 'max:255'],
