@@ -24,6 +24,11 @@ class SignInController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
 
+            $tenants = Auth::user()->tenants;
+            if ($tenants->count() === 1) {
+                return redirect()->route('tenant::home')->domain($tenants->first()->domain);
+            }
+
             return redirect()->intended(route('central::dashboard'));
         }
 
