@@ -1,8 +1,6 @@
 <script setup>
 import Frontend from "@/Frontend/Layouts/Frontend.vue";
 import Banner from "@/Frontend/Components/Banner.vue";
-import MessDot from "@/Frontend/Components/Decoration/MessDot.vue";
-import {Link} from "@inertiajs/inertia-vue3";
 
 defineProps({
     tenants: {

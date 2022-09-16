@@ -26,6 +26,7 @@ class SignInController extends Controller
 
             $tenants = Auth::user()->tenants;
             if ($tenants->count() === 1) {
+                tenancy(); // FIXME: this should be removed after package fixed issue.
                 return redirect()->route('tenant::home')->domain($tenants->first()->domain);
             }
 
