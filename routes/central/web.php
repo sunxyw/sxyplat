@@ -20,10 +20,7 @@ Route::get('/', function () {
     return Inertia::render('@frontend::Landing');
 })->name('home');
 
-Route::get('/dashboard', function () {
-//    Auth::logout();
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', Central\Dashboard::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('guest')->group(function () {
     Route::get('/signup', [Central\SignUpController::class, 'create'])->name('signup');
