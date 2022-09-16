@@ -10,6 +10,11 @@ class Dashboard extends Controller
 {
     public function __invoke(Request $request)
     {
-        return Inertia::render('@frontend::Dashboard');
+        return Inertia::render('@frontend::Dashboard', [
+            'tenants' => $request->user()->tenants->map(fn ($tenant) => [
+                'id' => $tenant->id,
+                'domain' => "http://{$tenant->domain}",
+            ]),
+        ]);
     }
 }
