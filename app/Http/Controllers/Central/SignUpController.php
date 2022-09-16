@@ -10,6 +10,7 @@ use App\Notifications\VerifyCodeRequested;
 use App\Services\FlowControlService;
 use App\Services\VerifyCodeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Illuminate\Validation\Rules;
@@ -106,17 +107,30 @@ class SignUpController extends Controller
             'email' => $request->post('email'),
             'password' => Hash::make($password),
         ]);
-        $tenant = Tenant::query()->create([
-            'id' => $id,
-        ]);
-        $tenant->run(function () use ($c_user) {
-            User::create([
-                'uuid' => $c_user->uuid,
-                'name' => $c_user->name,
-                'email' => $c_user->email,
-                'password' => $c_user->password,
+        try {
+            // we can't use transaction here because we run migration synchronously in development environment,
+            // which will cause implicit commit.
+            $tenant = Tenant::query()->create([
+                'id' => $id,
             ]);
-        });
+            try {
+                $tenant->run(function () use ($c_user) {
+                    User::create([
+                        'uuid' => $c_user->uuid,
+                        'name' => $c_user->name,
+                        'email' => $c_user->email,
+                        'password' => $c_user->password,
+                    ]);
+                });
+            } catch (\Throwable $e) {
+                $tenant->delete();
+                throw $e;
+            }
+        } catch (\Throwable $e) {
+            $c_user->delete();
+            throw $e;
+        }
+
         $this->flowControlService->endFlow(self::FLOW_NAME, $flow_key);
         return redirect()->route('central::home');
     }
