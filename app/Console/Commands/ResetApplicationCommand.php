@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class ResetApplicationCommand extends Command
 {
@@ -27,12 +28,14 @@ class ResetApplicationCommand extends Command
      */
     public function handle()
     {
-        $this->call('migrate:fresh', [
-            '--force' => true,
-        ]);
+        Cache::flush();
 
         $this->call('tenant:fresh', [
             '--include-missing' => true,
+        ]);
+
+        $this->call('migrate:fresh', [
+            '--force' => true,
         ]);
 
         return 0;
