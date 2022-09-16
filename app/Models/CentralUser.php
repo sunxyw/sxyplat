@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Stancl\Tenancy\Contracts\SyncMaster;
@@ -19,11 +18,11 @@ class CentralUser extends Authenticatable implements SyncMaster
     use HasFactory;
     use ResourceSyncing;
     use CentralConnection;
+    use HasUuids;
 
     protected $table = 'users';
 
     protected $fillable = [
-        'global_id',
         'name',
         'email',
         'password',
@@ -40,7 +39,7 @@ class CentralUser extends Authenticatable implements SyncMaster
 
     public function tenants(): BelongsToMany
     {
-        return $this->belongsToMany(Tenant::class, 'tenant_has_users', 'global_user_id', 'tenant_id', 'global_id')
+        return $this->belongsToMany(Tenant::class, 'tenant_has_users', 'global_user_id', 'tenant_id', 'uuid')
             ->using(TenantPivot::class);
     }
 
@@ -56,7 +55,7 @@ class CentralUser extends Authenticatable implements SyncMaster
 
     public function getGlobalIdentifierKeyName(): string
     {
-        return 'global_id';
+        return 'uuid';
     }
 
     public function getCentralModelName(): string

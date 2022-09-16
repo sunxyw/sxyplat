@@ -111,7 +111,7 @@ class SignUpController extends Controller
         ]);
         $tenant->run(function () use ($c_user) {
             User::create([
-                'global_id' => $c_user->global_id,
+                'uuid' => $c_user->uuid,
                 'name' => $c_user->name,
                 'email' => $c_user->email,
                 'password' => $c_user->password,
